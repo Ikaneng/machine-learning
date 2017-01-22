@@ -1,0 +1,63 @@
+clc
+
+% Load variables from file into workspace
+xData = load('dataset0.txt');
+
+% xData Covariance
+xCovariance = cov(xData)
+
+% xData Correlation coefficients
+xCorrelation = corrcoef(xData)
+
+% Scale each feature in X between [0, 1] to obtain a new dataset Y
+yData = normalizeColumns(xData)
+
+% yData Covariance
+yCovariance = cov(yData)
+
+% yData Correlation coefficients
+yCorrelation = corrcoef(yData)
+
+% Create figure window
+figure;
+
+% Plot Covariance & Correlation of xData & yData 
+subplot(2,2,1)
+imagesc(xCovariance)
+title('xData Correlation')
+colorbar
+
+subplot(2,2,1)
+imagesc(xCovariance)
+title('xData Correlation')
+colorbar
+
+%% Test: Compute covariance matrix
+
+% clc
+% 
+% testDataSet = [1, 2, 3; 3, 2, 1;]
+% 
+% testCovarianceMatrix = cov(testDataSet)
+% 
+% testCorrelationMatrix = corrcoef(testDataSet)
+% 
+% scaledDataSet2 = normalizeColumns(testDataSet)
+% 
+% figure;
+% colormap default
+% 
+% subplot(2,2,1)
+% imagesc(testCovarianceMatrix)
+% title('Covariance X')
+% colorbar
+
+
+%% Functions
+function normalizedColumns = normalizeColumns(m)
+    normalizedMatrix = [];
+    for i = 1 : size(m, 2)
+        normalizedMatrix(:,i) = m(:, i) ./ max(m(:, i));
+    end
+    normalizedColumns = normalizedMatrix;
+end
