@@ -7,19 +7,19 @@ clc
 xData = load('dataset0.txt');
 
 % xData Covariance
-xCovariance = cov(xData)
+xCovariance = cov(xData);
 
 % xData Correlation coefficients
-xCorrelation = corrcoef(xData)
+xCorrelation = corrcoef(xData);
 
 % Scale each feature in X between [0, 1] to obtain a new dataset Y
-yData = normalizeColumns(xData)
+yData = normalizeColumns(xData);
 
 % yData Covariance
-yCovariance = cov(yData)
+yCovariance = cov(yData);
 
 % yData Correlation coefficients
-yCorrelation = corrcoef(yData)
+yCorrelation = corrcoef(yData);
 
 % Plot Covariance & Correlation of xData & yData 
 figure;
@@ -50,7 +50,7 @@ minCorrelation = min(min(yCorrelation));
 
 % Find indices and values of minCorrelation elements, occurrs twice in
 % correlation matrix
-[feature1, feature2] = find(yCorrelation == minCorrelation)
+[feature1, feature2] = find(yCorrelation == minCorrelation);
 
 % Plot scatterplot of features where these elements occurr
 figure;
