@@ -1,3 +1,4 @@
+% Implement sge function
 function [mu, sigma] = sge(x)
 %
 % SGE Mean and variance estimator for spherical Gaussian distribution                               
@@ -11,6 +12,8 @@ function [mu, sigma] = sge(x)
 %
 % mu    : Estimated mean of the dataset [mu_1 mu_2 ... mu_p] 
 % sigma : Estimated standard deviation of the dataset (number)                 
-%
-
-YOUR CODE GOES HERE
+    rowDimension = size(x, 1);
+    columnDimension = size(x, 2);
+    mu = sum(x) / rowDimension;
+    sigma = sqrt(sum(sum((x - repmat(mu, rowDimension, 1)).^2)) / (rowDimension * columnDimension));
+end
