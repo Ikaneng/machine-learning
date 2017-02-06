@@ -59,7 +59,7 @@ folds = 5;
 Xrows = size(X,1);
 
 % Create indices vector of size Xrows and folds numbers 
-indices = crossvalind('Kfold', Xrows, 5);
+indices = crossvalind('Kfold', Xrows,folds);
 
 % Create counters for errors
 bayesErrors = 0;
@@ -94,11 +94,11 @@ for fold = 1:folds
             bayesErrors = bayesErrors + 1;
         end
         if Ytest2 ~= YtestData(test)
-            newErrors = newErrors +1;
+            newErrors = newErrors + 1;
         end
     end
 end
 
 % Print errors
-bayesErrors
-newErrors
+display(bayesErrors);
+display(newErrors);
