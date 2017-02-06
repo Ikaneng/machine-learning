@@ -2,7 +2,7 @@
 clc;
 
 % Load dataset
-digits = load('../digits.mat');
+digits = load('digits.mat');
 
 % Transform dataset to form X: 2200 x 256; y: 2200 x 1
 classFive = digits.data(:, :, 5)';
@@ -28,7 +28,7 @@ display(errorRatio);
 clc;
 
 % Load dataset
-digits = load('../digits.mat');
+digits = load('digits.mat');
 
 % Transform dataset using an alternative feature function
 imageDimension = 16;

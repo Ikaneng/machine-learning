@@ -14,7 +14,7 @@ clc
 % 
 % Xtest = [2, 2, 100];
 
-data = load('../dataset2.mat');
+data = load('dataset2.mat');
 X = data.x;
 y = data.y;
 
@@ -48,7 +48,7 @@ end
 clc;
 
 % Load data
-data = load('../dataset2.mat');
+data = load('dataset2.mat');
 X = data.x;
 y = data.y;
 
