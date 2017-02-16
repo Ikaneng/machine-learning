@@ -114,28 +114,59 @@ function res = cost(model, data, wd_coefficient)
 end
 
 function res = grad(model, data, wd_coefficient)
-  % model.input_to_hid is a matrix of size <number of hidden units> by <number of inputs i.e. 256>
-  % model.hid_to_class is a matrix of size <number of classes i.e. 10> by <number of hidden units>
-  % data.inputs is a matrix of size <number of inputs i.e. 256> by <number of data cases>
-  % data.targets is a matrix of size <number of classes i.e. 10> by <number of data cases>
+    % model.input_to_hid is a matrix of size <number of hidden units> by <number of inputs i.e. 256>
+    % model.hid_to_class is a matrix of size <number of classes i.e. 10> by <number of hidden units>
+    % data.inputs is a matrix of size <number of inputs i.e. 256> by <number of data cases>
+    % data.targets is a matrix of size <number of classes i.e. 10> by <number of data cases>
 
-  % The returned object is supposed to be exactly like parameter <model>, i.e. it has fields res.input_to_hid and res.hid_to_class. However, the contents of those matrices are gradients (d cost by d model parameter), instead of model parameters.
+    % The returned object is supposed to be exactly like parameter <model>, i.e. it has fields res.input_to_hid and res.hid_to_class. However, the contents of those matrices are gradients (d cost by d model parameter), instead of model parameters.
 
+    % Forward propagation
+    % Calculate z(j) = w(ij) * a(i)
+    hid_input = model.input_to_hid * data.inputs;
+    
+    % Calculate a(j) = g(z)
+    hid_output = logistic(hid_input);
+    
+    % Calculate z(k) = w(jk) * a(j)
+    class_input = model.hid_to_class * hid_output;
+    
+    % Calculate a(j) = g(z)
+    log_class_prob = logsoftmax(class_input);
+    
+    % Calculate model output
+    class_prob = exp(log_class_prob);
+    
+    %% TODO - Write code here ---------------
+    % Calculate number of inputs
+    number_inputs = length(data.inputs(1,:));
 
-  % Forward propagation
-  hid_input = model.input_to_hid * data.inputs; 
-  hid_output = logistic(hid_input);
-  class_input = model.hid_to_class * hid_output;
-  log_class_prob = logsoftmax(class_input);
-  class_prob = exp(log_class_prob); 
-  % class_prob is the model output.
-  
-  %% TODO - Write code here ---------------
+    % Calculate error classifier for wjk
+    error_classifier_wjk = (class_prob-data.targets) * hid_output' ...
+        / number_inputs;
 
-    % Right now the function just returns a lot of zeros. Your job is to change that.
-    res.input_to_hid = model.input_to_hid * 0;
-    res.hid_to_class = model.hid_to_class * 0;
-  % ---------------------------------------
+    % Calculate error weightdecay for wjk
+    error_weightdecay_wjk = model.hid_to_class * wd_coefficient;
+
+    % Calculate total error for wjk
+    error_total_wjk = error_classifier_wjk + error_weightdecay_wjk;
+
+    % Return error to res
+    res.hid_to_class = error_total_wjk;
+
+    % Calculate error classifier for wij
+    error_classifier_wij = ((model.hid_to_class' * (class_prob-data.targets) ...
+        .* ((logistic(hid_input) - logistic(hid_input).^2))) * data.inputs') / number_inputs;
+
+    % Calculate error weightdecay for wij
+    error_weightdecay_wij = model.input_to_hid * wd_coefficient;
+
+    % Calculate total error for wij
+    error_total_wij = error_classifier_wij + error_weightdecay_wij;
+
+    % Return error to res
+    res.input_to_hid = error_total_wij;
+    % ---------------------------------------
 end
 
 %% Activation functions
