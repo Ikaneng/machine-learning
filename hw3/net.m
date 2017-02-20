@@ -139,11 +139,11 @@ function res = grad(model, data, wd_coefficient)
     
     %% TODO - Write code here ---------------
     % Calculate number of inputs
-    number_inputs = length(data.inputs(1,:));
+    [number_inputs, number_classes] = size(data.inputs);
 
     % Calculate error classifier for wjk
     error_classifier_wjk = (class_prob-data.targets) * hid_output' ...
-        / number_inputs;
+        / number_classes;
 
     % Calculate error weightdecay for wjk
     error_weightdecay_wjk = model.hid_to_class * wd_coefficient;
@@ -155,9 +155,9 @@ function res = grad(model, data, wd_coefficient)
     res.hid_to_class = error_total_wjk;
 
     % Calculate error classifier for wij
-    error_classifier_wij = ((model.hid_to_class' * (class_prob-data.targets) ...
-        .* ((logistic(hid_input) - logistic(hid_input).^2))) * data.inputs') / number_inputs;
-
+    error_classifier_wij = (((class_prob - data.targets)' * model.hid_to_class)' ...
+        .* (hid_output - hid_output.^2)) * data.inputs' / number_classes;
+    
     % Calculate error weightdecay for wij
     error_weightdecay_wij = model.input_to_hid * wd_coefficient;
 
