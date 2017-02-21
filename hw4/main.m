@@ -27,10 +27,10 @@ plot([xPositive(1,1), (-b)/2],[xPositive(1,2), (-b)/2],'m:');
 axis([(min(X(:,1))-1) (max(X(:,1))+1) (min(X(:,2))-1) (max(X(:,2))+1)]);
 hold off;
 
-%% 1.1)a)
+%% 1.2)a)
 % See report
 
-%% 1.1)b)
+%% 1.2)b)
 clc;
 clear all;
 close all;
@@ -51,10 +51,10 @@ A=-diag(Y)*[X,ones(l,1)];
 b=-ones(l,1);
 min=quadprog(H,f,A,b)
 
-%% 1.1)c)
+%% 1.2)c)
 % See report
 
-%% 1.1)d)
+%% 1.2)d)
 clc;
 clear all;
 close all;
