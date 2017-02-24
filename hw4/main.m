@@ -15,14 +15,14 @@ Y=[yPositive; yNegative];
 Mdl=fitcsvm(X,Y);
 b=Mdl.Bias;
 w=Mdl.Beta;
-margin=margin(Mdl,X,Y)/norm(w);
+m=margin(Mdl,X,Y)/norm(w);
 
 % Plot
 hold on;
 scatter(xPositive(:,1),xPositive(:,2),'b+');
 scatter(xNegative(:,1),xNegative(:,2),'r.');
 syms x1 x2;
-ezplot(1*x1+1*x2+b==0);
+ezplot(w(1,1)*x1+w(2,1)*x2+b==0);
 plot([xPositive(1,1), (-b)/2],[xPositive(1,2), (-b)/2],'m:');
 axis([(min(X(:,1))-1) (max(X(:,1))+1) (min(X(:,2))-1) (max(X(:,2))+1)]);
 hold off;
@@ -107,17 +107,14 @@ label=predict(Mdl,data.X);
 mislabeled=data.Y-label;
 
 % Plot misplaced labels
-for i=1:length(data.X)
-    if mislabeled(i)~=0
-        plot(data.X(i,1),data.X(i,2),'.r','MarkerSize',21);
-    end
-end
+mislabeled_index = find(mislabeled); 
+plot(data.X(mislabeled_index,1),data.X(mislabeled_index,2),'.r','MarkerSize',21);
 
 % Create symbolic variables and functions 
-syms x y;
+syms x1 x2;
 
 % Plots hyperplane
-ezplot(Mdl.Beta(1,1) * x + Mdl.Beta(2,1) * y + Mdl.Bias == 0);
+ezplot(Mdl.Beta(1,1) * x1 + Mdl.Beta(2,1) * x2 + Mdl.Bias == 0);
 
 % Add plot info
 legend('-1','1','Support vectors', 'Misplaced','Boundary');
@@ -130,7 +127,5 @@ hold off
 
 % Report numbers
 boxconstraints = Mdl.BoxConstraints
-biaas = Mdl.Bias
+bias = Mdl.Bias
 margin = 2 / norm(Mdl.Beta)
-
-
