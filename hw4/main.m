@@ -77,5 +77,60 @@ ceq=0;
 lb=zeros(length(H),1);
 ub=inf*ones(length(H),1);
 alpha=quadprog(H,f,A,c,Aeq,ceq,lb,ub);
-w=X'*(alpha.*Y);
-b=1-(X(1,:)*w);
+w=X'*(alpha.*Y)
+b=1-(X(1,:)*w)
+
+%% 2.1)a-d)
+clc;
+clear all;
+close all;
+
+% Load data
+data=load('d1b.mat');
+
+% Retain current plot when adding new plots
+hold on
+
+% Train binary support vector machine classifier
+Mdl=fitcsvm(data.X,data.Y);
+
+% Scatter plot by group
+gscatter(data.X(:,1),data.X(:,2),data.Y,'rb','.+',6);
+
+% 2-D line plot
+plot(Mdl.SupportVectors(:,1),Mdl.SupportVectors(:,2),'o');
+
+% Predict labels using support vector machine classification model
+label=predict(Mdl,data.X);
+
+% Create array of misclassified labels
+mislabeled=data.Y-label;
+
+% Plot misplaced labels
+for i=1:length(data.X)
+    if mislabeled(i)~=0
+        plot(data.X(i,1),data.X(i,2),'.r','MarkerSize',21);
+    end
+end
+
+% Create symbolic variables and functions 
+syms x y;
+
+% Plots hyperplane
+ezplot(Mdl.Beta(1,1) * x + Mdl.Beta(2,1) * y + Mdl.Bias == 0);
+
+% Add plot info
+legend('-1','1','Support vectors', 'Misplaced','Boundary');
+xlabel('x1');
+ylabel('x2');
+title('Box-constraint = 1');
+
+% Set the hold state to off
+hold off
+
+% Report numbers
+boxconstraints = Mdl.BoxConstraints
+biaas = Mdl.Bias
+margin = 2 / norm(Mdl.Beta)
+
+
