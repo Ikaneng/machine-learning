@@ -1,4 +1,4 @@
-%% 1.1
+%% 1.1)
 clc;
 clear all;
 close all;
@@ -87,28 +87,30 @@ close all;
 
 % Load data
 data=load('d1b.mat');
+X=data.X;
+Y=data.Y;
 
 % Retain current plot when adding new plots
 hold on
 
 % Train binary support vector machine classifier
-Mdl=fitcsvm(data.X,data.Y);
+Mdl=fitcsvm(X,Y);
 
 % Scatter plot by group
-gscatter(data.X(:,1),data.X(:,2),data.Y,'rb','.+',6);
+gscatter(X(:,1),X(:,2),Y,'rb','.+',6);
 
 % 2-D line plot
 plot(Mdl.SupportVectors(:,1),Mdl.SupportVectors(:,2),'o');
 
 % Predict labels using support vector machine classification model
-label=predict(Mdl,data.X);
+label=predict(Mdl,X);
 
 % Create array of misclassified labels
-mislabeled=data.Y-label;
+mislabeled=Y-label;
 
 % Plot misplaced labels
 mislabeled_index = find(mislabeled); 
-plot(data.X(mislabeled_index,1),data.X(mislabeled_index,2),'.r','MarkerSize',21);
+plot(X(mislabeled_index,1),X(mislabeled_index,2),'.r','MarkerSize',21);
 
 % Create symbolic variables and functions 
 syms x1 x2;
@@ -137,31 +139,116 @@ close all;
 
 % Load data
 data=load('d2.mat');
+X=data.X;
+Y=data.Y;
 
 % Retain current plot when adding new plots
 hold on
 
 % Train support vector machine classifier
-Mdl = svmtrain(data.X, data.Y);
+Mdl=svmtrain(X, Y);
 
 % Scatter plot by group
-gscatter(data.X(:,1),data.X(:,2),data.Y,'rb','.+',6);
+gscatter(X(:,1),X(:,2),Y,'rb','.+',6);
 
 % Classify using support vector machine (SVM)
-label=svmclassify(Mdl,data.X,'ShowPlot',true);
+label=svmclassify(Mdl,X,'ShowPlot',true);
 
 % Create array of misclassified labels
-mislabeled=data.Y-label;
+mislabeled=Y-label;
 
 % Plot misplaced labels
 mislabeled_index = find(mislabeled); 
-plot(data.X(mislabeled_index,1),data.X(mislabeled_index,2),'.r','MarkerSize',21);
 
 % Report numbers
 w=Mdl.SupportVectors'*Mdl.Alpha;
+b=Mdl.Bias;
+
+plot(X(mislabeled_index,1),X(mislabeled_index,2),'o');
 
 % Add plot info
 legend('-1','1', 'Mislabeled');
 xlabel('x1');
 ylabel('x2')
 title('Box-constraint = 1');
+
+%% 2.2)b)
+clc;
+clear all;
+close all;
+
+% Load data
+data=load('d2.mat');
+X=data.X;
+Y=data.Y;
+
+% Setup variables
+showPlot=false;
+folds=5;
+kernels={'linear','quadratic','rbf'};
+methods={'smo','qp'};
+
+% Run cross validation and report execution time and error rate
+for i=1:length(kernels)
+    for j=1:length(methods)
+        % Print current kernel and method
+        fprintf('Kernel: %s, Method: %s\n',kernels{i},methods{j})
+        
+        % Start timer
+        tic;
+        
+        % Calculate error count
+        error_count=cross_validator(X,Y,folds,@(XTest,XTrain,YTrain)svm_classifier(kernels{i},methods{j},XTest,XTrain,YTrain,showPlot));
+        
+        % Stop and report timer
+        toc;
+        
+        % Calculate error rate
+        error_rate=error_count./size(Y,1);
+        
+        % Print error rate
+        fprintf('Error rate: %g\n\n',error_rate);
+    end
+end
+
+%% 2.2)c)
+clc;
+clear all;
+close all;
+
+% Load data
+data=load('d2.mat');
+X=data.X;
+Y=data.Y;
+
+% Retain current plot when adding new plots
+hold on
+
+% Scatter plot by group
+gscatter(data.X(:,1),data.X(:,2),data.Y,'rb','.+',6);
+
+% Set grid step size
+s=0.02;
+
+% Create meshgrid from X
+[x1grid,x2grid] = meshgrid(min(data.X(:,1)):s:max(data.X(:,1)), ...
+    min(data.X(:,2)):s:max(data.X(:,2)));
+Xgrid = [x1grid(:),x2grid(:)];        
+
+% Train binary support vector machine classifier
+Mdl=fitcsvm(data.X,data.Y,'KernelFunction','rbf');
+
+% Predict scores using support vector machine classification model
+[~,score]=predict(Mdl,Xgrid);
+
+% Contour plot of matrix
+contour(x1grid,x2grid,reshape(score(:,2),size(x1grid)),[0 0],'k');
+
+% Add plot info
+title('Decision Boundary for RBF kernel')
+legend('-1','1','Boundary');
+xlabel('x1');
+ylabel('x2')
+
+% Set the hold state to off
+hold off
