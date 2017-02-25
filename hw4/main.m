@@ -117,7 +117,7 @@ syms x1 x2;
 ezplot(Mdl.Beta(1,1) * x1 + Mdl.Beta(2,1) * x2 + Mdl.Bias == 0);
 
 % Add plot info
-legend('-1','1','Support vectors', 'Misplaced','Boundary');
+legend('-1','1','Support vectors', 'Mislabeled','Boundary');
 xlabel('x1');
 ylabel('x2');
 title('Box-constraint = 1');
@@ -129,3 +129,39 @@ hold off
 boxconstraints = Mdl.BoxConstraints
 bias = Mdl.Bias
 margin = 2 / norm(Mdl.Beta)
+
+%% 2.2)a)
+clc;
+clear all;
+close all;
+
+% Load data
+data=load('d2.mat');
+
+% Retain current plot when adding new plots
+hold on
+
+% Train support vector machine classifier
+Mdl = svmtrain(data.X, data.Y);
+
+% Scatter plot by group
+gscatter(data.X(:,1),data.X(:,2),data.Y,'rb','.+',6);
+
+% Classify using support vector machine (SVM)
+label=svmclassify(Mdl,data.X,'ShowPlot',true);
+
+% Create array of misclassified labels
+mislabeled=data.Y-label;
+
+% Plot misplaced labels
+mislabeled_index = find(mislabeled); 
+plot(data.X(mislabeled_index,1),data.X(mislabeled_index,2),'.r','MarkerSize',21);
+
+% Report numbers
+w=Mdl.SupportVectors'*Mdl.Alpha;
+
+% Add plot info
+legend('-1','1', 'Mislabeled');
+xlabel('x1');
+ylabel('x2')
+title('Box-constraint = 1');
