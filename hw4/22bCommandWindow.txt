@@ -1,0 +1,24 @@
+Kernel: linear, Method: smo
+Elapsed time is 5.826053 seconds.
+Error rate: 0.445
+
+Kernel: linear, Method: qp
+Elapsed time is 7.697023 seconds.
+Error rate: 0.515
+
+Kernel: quadratic, Method: smo
+Elapsed time is 4.236103 seconds.
+Error rate: 0
+
+Kernel: quadratic, Method: qp
+Elapsed time is 19.376386 seconds.
+Error rate: 0
+
+Kernel: rbf, Method: smo
+Elapsed time is 2.288212 seconds.
+Error rate: 0
+
+Kernel: rbf, Method: qp
+Elapsed time is 15.371009 seconds.
+Error rate: 0
+
