@@ -9,7 +9,7 @@ private
 to
 full
 well
-
+;
 Cluster 2 
 put
 brought
@@ -21,7 +21,7 @@ would
 did
 finally
 ultimately
-
+;
 Cluster 3 
 be
 that
@@ -33,7 +33,7 @@ an
 similarly
 instance
 well
-
+;
 Cluster 4 
 ever
 next
@@ -45,7 +45,7 @@ making
 putting
 going
 getting
-
+;
 Cluster 5 
 curtis
 allen
@@ -57,7 +57,7 @@ warren
 walker
 harris
 oliver
-
+;
 Cluster 6 
 another
 back
@@ -69,7 +69,7 @@ be
 off
 turn
 when
-
+;
 Cluster 7 
 now
 near
@@ -81,7 +81,7 @@ still
 from
 to
 it
-
+;
 Cluster 8 
 england
 london
@@ -93,7 +93,7 @@ james
 whilst
 thomas
 barton
-
+;
 Cluster 9 
 country
 countries
@@ -105,7 +105,7 @@ well
 elsewhere
 making
 with
-
+;
 Cluster 10 
 something
 nothing

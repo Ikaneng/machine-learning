@@ -64,11 +64,13 @@ gscatter(X(:,1),X(:,2),Y1,'rb','.+');
 title('Kernel k-means clustering');
 xlabel('x1');
 ylabel('x2');
+axis('square');
 subplot(1,2,2);
 gscatter(X(:,1),X(:,2),Y2,'rb','.+');
 title('Linear k-means clustering');
 xlabel('x1');
 ylabel('x2');
+axis('square');
 
 % Save figure
 print('11cdfigure','-dpng');
